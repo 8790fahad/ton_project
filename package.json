@@ -19,6 +19,6 @@
   },
   "scripts": {
     "compile": "ts-node ./scripts/compile.ts",
-    "test": "yarn jest"
+    "test": "yarn compile && yarn jest"
   }
 }

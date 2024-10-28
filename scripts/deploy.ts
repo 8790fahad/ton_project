@@ -1,21 +1,22 @@
-import { beginCell, Cell, contractAddress, StateInit, storeStateInit } from "@ton/core";
-import { hex } from "../build/main.compiled.json";
-async function deployScript() {
-  const codeCell = Cell.fromBoc(Buffer.from(hex, "hex"))[0];
-  const dataCell = new Cell();
-  const stateInit: StateInit = {
-    code: codeCell,
-    data: dataCell,
-  };
+import { address, toNano }  from "@ton/core";
+import { MainContract } from "../wrappers/MainContract";
+import { compile, NetworkProvider } from "@ton/blueprint";
 
-  const stateInitBuilder = beginCell();
-  storeStateInit(stateInit)(stateInitBuilder);
-  const stateInitCell = stateInitBuilder.endCell();
+export async function run(provider: NetworkProvider) {
+  const myContract = MainContract.createFromConfig(
+    {
+      number: 0,
+      address: address("kQDU69xgU6Mj-iNDHYsWWuNx7yRPQC_bNZNCpq5yVc7LiE7D"),
+      owner_address: address(
+        "kQDU69xgU6Mj-iNDHYsWWuNx7yRPQC_bNZNCpq5yVc7LiE7D"
+      ),
+    },
+    await compile("MainContract")
+  );
 
-  const address = contractAddress(0, {
-    code: codeCell,
-    data: dataCell,
-  });
+  const openedContract = provider.open(myContract);
+
+  openedContract.sendDeploy(provider.sender(), toNano("0.05"));
+
+  await provider.waitForDeploy(myContract.address);
 }
-
-deployScript();

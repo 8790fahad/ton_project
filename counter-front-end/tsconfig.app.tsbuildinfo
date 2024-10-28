@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/contracts/maincontract.ts","./src/hook/useasyncinitialize.ts","./src/hook/usemaincontract.ts","./src/hook/usetonclient.ts","./src/hook/usetonconnect.ts"],"version":"5.6.3"}
